@@ -25,7 +25,6 @@ def get_music_list(source):
         link = link.encode('ascii', 'ignore')
         music_list[title] = link
 
-    print "music list is " + str(music_list)
     #print match[0]
     #match[0]= [s.encode('ascii', 'ignore') for s in match[0]]
     
@@ -62,15 +61,23 @@ def print_titles(music_list):
 
 def main():
     print "Now in main"
+    if len(sys.argv) == 1:
+        print "No artist specified, quitting program"
+        return
     global artist
     artist = sys.argv[1]
     print "artist is " + artist
     source = get_source()
+    if source is None:
+        print "No data pulled from html, artist may not exist"
+        return
     music_list = get_music_list(source)
+    if len(music_list) <= 0:
+        print "Artist does not exist or has nothing to download"
+        return
     print_titles(music_list)
     
-    print "Choose music to download"
-    title_to_grab = raw_input()
+    title_to_grab = raw_input("Choose title to download: ")
     download_music(music_list[title_to_grab], title_to_grab)  
     
 
